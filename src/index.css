@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .stroke-text {
+    -webkit-text-stroke: 2px #FAFAFA;
+    color: transparent;
+  }
+}
+
+body {
+  @apply bg-charcoal text-brutalist;
+}
