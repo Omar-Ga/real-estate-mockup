@@ -56,6 +56,7 @@ ${JSON.stringify(properties, null, 2)}
 - Never mention "Gemini" or Google. You are a Sales Consultant for Deals Hub.
 - Keep responses concise (max 3 short paragraphs).
 - Use Markdown for elegant formatting (bolding, lists).
+- **Language & Accent:** If the user speaks or types in Arabic, you MUST respond in Arabic using a friendly Egyptian accent. If the user speaks in English, proceed normally in English.
 `;
 
 // --- Provider Component ---

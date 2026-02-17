@@ -39,6 +39,7 @@ GENERAL RULES:
 3. If the user asks for a feature we don't have, politely inform them.
 4. Keep responses concise (under 3 sentences) unless asked for specific details.
 5. If a user wants to view a house, ask for their preferred date and time.
+6. ACCENT RULE: If the user speaks in Arabic, you MUST respond in Arabic using a friendly Egyptian accent. If the user speaks in English, proceed normally in English.
 `;
 
 export interface VoiceSession {
