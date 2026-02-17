@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { properties } from '../data/properties';
 import PropertyCard from '../components/PropertyCard';
 import { Filter, X } from 'lucide-react';
@@ -29,72 +29,20 @@ const Listings: React.FC = () => {
         
         <button 
           onClick={() => setFilterOpen(!filterOpen)}
-          className="flex items-center space-x-2 uppercase tracking-widest text-sm font-bold hover:text-industrial transition-colors mt-6 md:mt-0"
+          className={clsx(
+            "flex items-center space-x-2 uppercase tracking-widest text-sm font-bold transition-colors mt-6 md:mt-0",
+            filterOpen ? "text-industrial" : "hover:text-industrial"
+          )}
         >
-          <Filter size={18} />
-          <span>Filter</span>
+          {filterOpen ? <X size={18} /> : <Filter size={18} />}
+          <span>{filterOpen ? "Close" : "Filter"}</span>
         </button>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-12">
-        {/* Filter Sidebar - Mobile Toggle / Desktop Sticky */}
-        <motion.aside 
-          initial={{ height: 0, opacity: 0 }}
-          animate={{ 
-            height: filterOpen ? 'auto' : '0px',
-            opacity: filterOpen ? 1 : 0
-          }}
-          className={clsx(
-            "lg:w-64 lg:h-auto lg:opacity-100 overflow-hidden lg:overflow-visible lg:block",
-             filterOpen ? "block" : "hidden lg:block"
-          )}
-        >
-          <div className="sticky top-32 space-y-8">
-            <div>
-              <h3 className="text-xs uppercase tracking-widest text-concrete mb-4">Property Type</h3>
-              <ul className="space-y-3">
-                <li>
-                  <button 
-                    onClick={() => setSelectedType(null)}
-                    className={clsx(
-                      "text-sm hover:text-industrial transition-colors text-left w-full",
-                      selectedType === null ? "text-industrial font-bold" : "text-brutalist"
-                    )}
-                  >
-                    All Properties
-                  </button>
-                </li>
-                {propertyTypes.map(type => (
-                  <li key={type}>
-                    <button 
-                      onClick={() => setSelectedType(type)}
-                      className={clsx(
-                        "text-sm capitalize hover:text-industrial transition-colors text-left w-full",
-                        selectedType === type ? "text-industrial font-bold" : "text-brutalist"
-                      )}
-                    >
-                      {type}s
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-            {/* Additional filters could go here */}
-            <div>
-              <h3 className="text-xs uppercase tracking-widest text-concrete mb-4">Price Range</h3>
-              <div className="flex items-center space-x-2 text-sm text-concrete">
-                <span>$1M</span>
-                <div className="h-[1px] bg-concrete/50 w-8"></div>
-                <span>$10M+</span>
-              </div>
-            </div>
-          </div>
-        </motion.aside>
-
-        {/* Grid */}
+        {/* Grid - Now first to be left-aligned */}
         <div className="flex-1">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-16">
             {filteredProperties.map((property, index) => (
               <PropertyCard key={property.id} property={property} index={index} />
             ))}
@@ -112,6 +60,101 @@ const Listings: React.FC = () => {
             </div>
           )}
         </div>
+
+        {/* Filter Sidebar - Now on the right */}
+        <AnimatePresence>
+          {filterOpen && (
+            <motion.aside 
+              initial={{ width: 0, opacity: 0, x: 20 }}
+              animate={{ width: 256, opacity: 1, x: 0 }}
+              exit={{ width: 0, opacity: 0, x: 20 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="hidden lg:block overflow-hidden"
+            >
+              <div className="w-64 sticky top-32 space-y-8">
+                <div>
+                  <h3 className="text-xs uppercase tracking-widest text-concrete mb-4">Property Type</h3>
+                  <ul className="space-y-3">
+                    <li>
+                      <button 
+                        onClick={() => setSelectedType(null)}
+                        className={clsx(
+                          "text-sm hover:text-industrial transition-colors text-left w-full",
+                          selectedType === null ? "text-industrial font-bold" : "text-brutalist"
+                        )}
+                      >
+                        All Properties
+                      </button>
+                    </li>
+                    {propertyTypes.map(type => (
+                      <li key={type}>
+                        <button 
+                          onClick={() => setSelectedType(type)}
+                          className={clsx(
+                            "text-sm capitalize hover:text-industrial transition-colors text-left w-full",
+                            selectedType === type ? "text-industrial font-bold" : "text-brutalist"
+                          )}
+                        >
+                          {type}s
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                
+                <div>
+                  <h3 className="text-xs uppercase tracking-widest text-concrete mb-4">Price Range</h3>
+                  <div className="flex items-center space-x-2 text-sm text-concrete">
+                    <span>5M EGP</span>
+                    <div className="h-[1px] bg-concrete/50 w-8"></div>
+                    <span>50M EGP</span>
+                  </div>
+                </div>
+              </div>
+            </motion.aside>
+          )}
+        </AnimatePresence>
+
+        {/* Mobile Filter Sidebar */}
+        <AnimatePresence>
+          {filterOpen && (
+            <motion.div 
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="lg:hidden overflow-hidden border-t border-concrete/10 pt-8"
+            >
+              <div className="space-y-8 pb-8">
+                <div>
+                  <h3 className="text-xs uppercase tracking-widest text-concrete mb-4">Property Type</h3>
+                  <div className="flex flex-wrap gap-3">
+                    <button 
+                      onClick={() => setSelectedType(null)}
+                      className={clsx(
+                        "px-4 py-2 text-xs uppercase tracking-widest border transition-colors",
+                        selectedType === null ? "border-industrial text-industrial" : "border-concrete/30 text-concrete hover:border-brutalist"
+                      )}
+                    >
+                      All
+                    </button>
+                    {propertyTypes.map(type => (
+                      <button 
+                        key={type}
+                        onClick={() => setSelectedType(type)}
+                        className={clsx(
+                          "px-4 py-2 text-xs uppercase tracking-widest border transition-colors",
+                          selectedType === type ? "border-industrial text-industrial" : "border-concrete/30 text-concrete hover:border-brutalist"
+                        )}
+                      >
+                        {type}s
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

@@ -17,4 +17,12 @@ export interface Property {
   active: boolean;
   images: string[];
   amenities: string[];
+  // Extended details for AI context
+  internalCode?: string;
+  landArea?: number; // in sqm
+  bua?: number; // in sqm
+  finishing?: string;
+  deliveryDate?: string;
+  paymentPlan?: string;
+  downPayment?: number;
 }
