@@ -84,9 +84,9 @@ const Navbar: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="fixed inset-0 z-40 bg-charcoal/98 backdrop-blur-xl md:hidden flex flex-col items-center justify-center"
+            className="fixed inset-0 z-40 bg-charcoal/98 backdrop-blur-xl md:hidden flex flex-col items-center justify-start pt-32 overflow-y-auto"
           >
-            <div className="flex flex-col items-center space-y-8">
+            <div className="flex flex-col items-center space-y-8 pb-10">
               {navItems.map((item, index) => {
                 const path = item === 'Properties' ? '/listings' : `/${item.toLowerCase()}`;
                 return (
